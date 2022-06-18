@@ -26,14 +26,33 @@ import sqlite3
 
 con = sqlite3.connect("../netflix.db")
 cur = con.cursor()
-sqlite_query = ("")  # TODO измените код запроса
+# sqlite_query = ("""
+#     SELECT `title`, `duration` FROM netflix
+#     WHERE `duration` in (
+#         SELECT MAX(`duration`) FROM netflix
+#         WHERE `type` = 'Movie'
+#         AND `release_year` = 2019
+#         AND `duration_type` = 'min'
+#     )
+# """)  # TODO измените код запроса
+
+sqlite_query = ("""
+    SELECT `title`, MAX(`duration`)
+    FROM netflix
+    WHERE `type` = 'Movie'
+    AND `release_year` = 2019
+    AND `duration_type` = 'min'
+""")
+
 cur.execute(sqlite_query)
 executed_query = cur.fetchall()
 
 # TODO Результат запроса сохраните в переменной result
 # для последующей выдачи в требуемом формате
 
-result = ""
+# result = "\n".join([f"{title} - {minutes} минут" for title, minutes in executed_query])
+
+result = f"{executed_query[0][0]} - {executed_query[0][1]} минут"
 
 if __name__ == '__main__':
     print(result)
